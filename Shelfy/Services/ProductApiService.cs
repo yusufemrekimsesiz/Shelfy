@@ -1,0 +1,68 @@
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Shelfy.Models;
+
+namespace Shelfy.Services;
+
+public class ProductApiService
+{
+    private readonly HttpClient _httpClient;
+    private const string BaseUrl = "https://world.openfoodfacts.org/api/v0/product/";
+
+    public ProductApiService(HttpClient httpClient)
+    {
+        _httpClient = httpClient;
+    }
+
+    public async Task<ProductInfo> GetProductByBarcodeAsync(string barcode)
+    {
+        try
+        {
+            var url = $"{BaseUrl}{barcode}.json";
+            var response = await _httpClient.GetAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+                return new ProductInfo { Found = false };
+
+            var json = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<OpenFoodFactsResponse>(json, options);
+
+            if (result?.Status != 1 || result.Product is null)
+                return new ProductInfo { Found = false };
+
+            return new ProductInfo
+            {
+                Found = true,
+                ProductName = result.Product.ProductName ?? "Bilinmeyen Ürün",
+                Brand = result.Product.Brands ?? "Bilinmeyen Marka",
+                ImageUrl = result.Product.ImageUrl ?? string.Empty
+            };
+        }
+        catch
+        {
+            return new ProductInfo { Found = false };
+        }
+    }
+
+    private class OpenFoodFactsResponse
+    {
+        [JsonPropertyName("status")]
+        public int Status { get; set; }
+
+        [JsonPropertyName("product")]
+        public ProductRaw? Product { get; set; }
+    }
+
+    private class ProductRaw
+    {
+        [JsonPropertyName("product_name")]
+        public string? ProductName { get; set; }
+
+        [JsonPropertyName("brands")]
+        public string? Brands { get; set; }
+
+        [JsonPropertyName("image_url")]
+        public string? ImageUrl { get; set; }
+    }
+}
