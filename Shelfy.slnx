@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="Shelfy/Shelfy.csproj" />
+  <Project Path="Shelfy.Core/Shelfy.Core.csproj" />
+  <Project Path="Shelfy/Shelfy.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

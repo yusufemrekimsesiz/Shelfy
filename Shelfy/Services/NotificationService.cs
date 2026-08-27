@@ -6,6 +6,8 @@ namespace Shelfy.Services;
 
 public class NotificationService
 {
+    private const int WarningDaysBefore = 3;
+
     public async Task RequestPermissionAsync()
     {
         await LocalNotificationCenter.Current.RequestNotificationPermission();
@@ -13,28 +15,51 @@ public class NotificationService
 
     public async Task ScheduleExpirationNotificationAsync(PantryItem item)
     {
-        var notifyDate = item.ExpirationDate.AddDays(-2);
+      
+        await CancelNotificationAsync(item.Id);
 
-        if (notifyDate <= DateTime.Now)
-            return;
+        var warningDate = item.ExpirationDate.Date.AddDays(-WarningDaysBefore);
+        var expirationDayDate = item.ExpirationDate.Date;
 
-        var request = new NotificationRequest
+        if (warningDate > DateTime.Now)
         {
-            NotificationId = item.Id,
-            Title = "Son Kullanma Tarihi Yaklaşıyor",
-            Description = $"{item.ProductName} ürününün son kullanma tarihine 2 gün kaldı.",
-            Schedule = new NotificationRequestSchedule
+            var warningRequest = new NotificationRequest
             {
-                NotifyTime = notifyDate
-            }
-        };
+                NotificationId = GetWarningNotificationId(item.Id),
+                Title = "Son Kullanma Tarihi Yaklaşıyor",
+                Description = $"{item.ProductName} ürününün son kullanma tarihine {WarningDaysBefore} gün kaldı.",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = warningDate
+                }
+            };
 
-        await LocalNotificationCenter.Current.Show(request);
+            await LocalNotificationCenter.Current.Show(warningRequest);
+        }
+
+        if (expirationDayDate > DateTime.Now)
+        {
+            var expirationRequest = new NotificationRequest
+            {
+                NotificationId = GetExpirationNotificationId(item.Id),
+                Title = "Son Kullanma Tarihi Bugün",
+                Description = $"{item.ProductName} ürününün son kullanma tarihi bugün.",
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = expirationDayDate
+                }
+            };
+
+            await LocalNotificationCenter.Current.Show(expirationRequest);
+        }
     }
 
     public Task CancelNotificationAsync(int itemId)
     {
-        LocalNotificationCenter.Current.Cancel(itemId);
+        LocalNotificationCenter.Current.Cancel(GetWarningNotificationId(itemId));
+        LocalNotificationCenter.Current.Cancel(GetExpirationNotificationId(itemId));
         return Task.CompletedTask;
     }
+    private static int GetWarningNotificationId(int itemId) => itemId * 2;
+    private static int GetExpirationNotificationId(int itemId) => itemId * 2 + 1;
 }
