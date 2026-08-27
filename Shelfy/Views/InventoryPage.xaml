@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Shelfy.ViewModels"
-    xmlns:models="clr-namespace:Shelfy.Models"
+   xmlns:models="clr-namespace:Shelfy.Core;assembly=Shelfy.Core"
     x:DataType="vm:InventoryViewModel"
     Title="Kilerim"
     BackgroundColor="#F5F5F7">
@@ -13,14 +13,26 @@
         <ToolbarItem Text="Elle Ekle" Command="{Binding GoToManualEntryCommand}" />
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,Auto,*">
 
         <SearchBar Grid.Row="0"
                    Placeholder="Ürün veya marka ara..."
                    Text="{Binding SearchText}"
                    Margin="12,12,12,0" />
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="8" Margin="12,4,12,0">
+            <Picker Grid.Column="0"
+                    Title="Sırala"
+                    ItemsSource="{Binding SortOptions}"
+                    SelectedItem="{Binding SelectedSortOption}" />
+
+            <Picker Grid.Column="1"
+                    Title="Kategori"
+                    ItemsSource="{Binding CategoryFilterOptions}"
+                    SelectedItem="{Binding SelectedCategory}" />
+        </Grid>
+
+        <Grid Grid.Row="2">
             <RefreshView IsRefreshing="{Binding IsRefreshing}"
                          Command="{Binding LoadItemsCommand}">
                 <CollectionView ItemsSource="{Binding PantryItems}"
@@ -46,16 +58,26 @@
                                     <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="2">
                                         <Label Text="{Binding ProductName}" FontAttributes="Bold" FontSize="15" LineBreakMode="TailTruncation" />
                                         <Label Text="{Binding Brand}" FontSize="12" TextColor="Gray" />
-                                        <HorizontalStackLayout Spacing="10">
-                                            <Label Text="{Binding Quantity, StringFormat='Adet: {0}'}" FontSize="12" />
+                                        <Label Text="{Binding Category}" FontSize="10" TextColor="#4CAF50" />
+
+                                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center" Margin="0,4,0,0">
+                                            <Button Text="-" FontSize="14" WidthRequest="26" HeightRequest="26" Padding="0" CornerRadius="13"
+                                                    BackgroundColor="#EEEEEE" TextColor="Black"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InventoryViewModel}}, Path=DecrementQuantityCommand}"
+                                                    CommandParameter="{Binding .}" />
+                                            <Label Text="{Binding Quantity}" FontSize="13" VerticalOptions="Center" WidthRequest="20" HorizontalTextAlignment="Center" />
+                                            <Button Text="+" FontSize="14" WidthRequest="26" HeightRequest="26" Padding="0" CornerRadius="13"
+                                                    BackgroundColor="#EEEEEE" TextColor="Black"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InventoryViewModel}}, Path=IncrementQuantityCommand}"
+                                                    CommandParameter="{Binding .}" />
                                             <Label Text="{Binding ExpirationDate, StringFormat='SKT: {0:dd/MM/yyyy}'}"
-                                                   FontSize="12"
-                                                   TextColor="{Binding IsExpired, Converter={StaticResource BoolToColorConverter}}" />
+                                                   FontSize="12" Margin="8,0,0,0"
+                                                   TextColor="{Binding ., Converter={StaticResource ExpiryToColorConverter}}" />
                                         </HorizontalStackLayout>
                                     </VerticalStackLayout>
 
                                     <ImageButton Grid.Column="2" Source="delete_icon.png" HeightRequest="24" WidthRequest="24"
-                                                 VerticalOptions="Center"
+                                                 VerticalOptions="Start"
                                                  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InventoryViewModel}}, Path=DeleteItemCommand}"
                                                  CommandParameter="{Binding .}" />
                                 </Grid>
@@ -66,11 +88,13 @@
             </RefreshView>
 
             <VerticalStackLayout IsVisible="{Binding IsEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                <Label Text="📦" FontSize="48" HorizontalOptions="Center" />
                 <Label Text="Kileriniz boş" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
                 <Label Text="Taramaya başlayarak ürün ekleyin" FontSize="13" TextColor="Gray" HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <VerticalStackLayout IsVisible="{Binding ShowNoResults}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                <Label Text="🔍" FontSize="40" HorizontalOptions="Center" />
                 <Label Text="Sonuç bulunamadı" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
             </VerticalStackLayout>
 

@@ -1,6 +1,6 @@
 ﻿using Plugin.LocalNotification;
 using Plugin.LocalNotification.Core.Models;
-using Shelfy.Models;
+using Shelfy.Core;
 
 namespace Shelfy.Services;
 

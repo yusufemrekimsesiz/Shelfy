@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Shelfy.Models;
+using Shelfy.Core;
 using Shelfy.Services;
 using Shelfy.Views;
 
@@ -9,7 +9,7 @@ namespace Shelfy.ViewModels;
 
 public partial class InventoryViewModel : ObservableObject
 {
-    private readonly DatabaseService _databaseService;
+    private readonly IPantryRepository _pantryRepository;
     private readonly NotificationService _notificationService;
     private List<PantryItem> _allItems = new();
 
@@ -28,51 +28,86 @@ public partial class InventoryViewModel : ObservableObject
     [ObservableProperty]
     private string searchText = string.Empty;
 
-    public InventoryViewModel(DatabaseService databaseService, NotificationService notificationService)
+    [ObservableProperty]
+    private string selectedSortOption = PantrySortOptions.ByExpiration;
+
+    [ObservableProperty]
+    private string selectedCategory = "Tümü";
+
+    public string[] SortOptions => PantrySortOptions.All;
+
+    public string[] CategoryFilterOptions =>
+        new[] { "Tümü" }.Concat(Categories.All).ToArray();
+
+    public InventoryViewModel(IPantryRepository pantryRepository, NotificationService notificationService)
     {
-        _databaseService = databaseService;
+        _pantryRepository = pantryRepository;
         _notificationService = notificationService;
     }
 
     [RelayCommand]
     private async Task LoadItemsAsync()
     {
-        _allItems = await _databaseService.GetAllAsync();
+        _allItems = await _pantryRepository.GetAllAsync();
         ApplyFilter();
         IsRefreshing = false;
     }
 
-    partial void OnSearchTextChanged(string value)
-    {
-        ApplyFilter();
-    }
+    partial void OnSearchTextChanged(string value) => ApplyFilter();
+    partial void OnSelectedSortOptionChanged(string value) => ApplyFilter();
+    partial void OnSelectedCategoryChanged(string value) => ApplyFilter();
 
     private void ApplyFilter()
     {
-        var filtered = string.IsNullOrWhiteSpace(SearchText)
-            ? _allItems
-            : _allItems.Where(x =>
-                x.ProductName.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
-                x.Brand.Contains(SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+        var result = PantryFilterService.Filter(_allItems, SearchText, SelectedCategory, SelectedSortOption);
 
         PantryItems.Clear();
-        foreach (var item in filtered)
+        foreach (var item in result)
             PantryItems.Add(item);
 
         IsEmpty = _allItems.Count == 0;
-        ShowNoResults = _allItems.Count > 0 && filtered.Count == 0;
+        ShowNoResults = _allItems.Count > 0 && result.Count == 0;
     }
 
     [RelayCommand]
-    private async Task GoToScanAsync()
+    private async Task GoToScanAsync() => await Shell.Current.GoToAsync(nameof(ScanPage));
+
+    [RelayCommand]
+    private async Task GoToManualEntryAsync() => await Shell.Current.GoToAsync(nameof(ManualEntryPage));
+
+    [RelayCommand]
+    private async Task IncrementQuantityAsync(PantryItem item)
     {
-        await Shell.Current.GoToAsync(nameof(ScanPage));
+        if (item is null) return;
+        item.Quantity++;
+        await _pantryRepository.SaveAsync(item);
+        RefreshItemInList(item);
     }
 
     [RelayCommand]
-    private async Task GoToManualEntryAsync()
+    private async Task DecrementQuantityAsync(PantryItem item)
     {
-        await Shell.Current.GoToAsync(nameof(ManualEntryPage));
+        if (item is null) return;
+
+        if (item.Quantity <= 1)
+        {
+            await DeleteItemAsync(item);
+            return;
+        }
+
+        item.Quantity--;
+        await _pantryRepository.SaveAsync(item);
+        RefreshItemInList(item);
+    }
+
+    private void RefreshItemInList(PantryItem item)
+    {
+        var index = PantryItems.IndexOf(item);
+        if (index >= 0)
+        {
+            PantryItems.RemoveAt(index);
+            PantryItems.Insert(index, item);
+        }
     }
 
     [RelayCommand]
@@ -87,7 +122,7 @@ public partial class InventoryViewModel : ObservableObject
 
         if (!confirm) return;
 
-        await _databaseService.DeleteAsync(item);
+        await _pantryRepository.DeleteAsync(item);
         await _notificationService.CancelNotificationAsync(item.Id);
 
         _allItems.Remove(item);

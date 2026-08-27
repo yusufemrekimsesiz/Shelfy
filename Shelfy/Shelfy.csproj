@@ -107,4 +107,8 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Shelfy.Core\Shelfy.Core.csproj" />
+	</ItemGroup>
+
 </Project>

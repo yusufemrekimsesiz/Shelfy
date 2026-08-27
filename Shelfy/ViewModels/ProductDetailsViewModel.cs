@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Shelfy.Models;
+using Shelfy.Core;
 using Shelfy.Services;
 using Shelfy.Views;
 
@@ -10,7 +10,7 @@ namespace Shelfy.ViewModels;
 public partial class ProductDetailsViewModel : ObservableObject
 {
     private readonly ProductApiService _productApiService;
-    private readonly DatabaseService _databaseService;
+    private readonly IPantryRepository _pantryRepository;
     private readonly NotificationService _notificationService;
 
     [ObservableProperty]
@@ -24,6 +24,12 @@ public partial class ProductDetailsViewModel : ObservableObject
 
     [ObservableProperty]
     private string imageUrl = string.Empty;
+
+    [ObservableProperty]
+    private bool hasImage;
+
+    [ObservableProperty]
+    private string category = "Diğer";
 
     [ObservableProperty]
     private int quantity = 1;
@@ -40,13 +46,26 @@ public partial class ProductDetailsViewModel : ObservableObject
     [ObservableProperty]
     private bool isNotFound;
 
+    [ObservableProperty]
+    private bool isNetworkError;
+
+    public string[] CategoryOptions => Categories.All;
+
+    public bool IsCameraSupported => DeviceInfo.Platform != DevicePlatform.WinUI;
+
+    public bool ShowContent => !IsLoading && !IsNetworkError;
+
+    partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowContent));
+    partial void OnIsNetworkErrorChanged(bool value) => OnPropertyChanged(nameof(ShowContent));
+    partial void OnImageUrlChanged(string value) => HasImage = !string.IsNullOrWhiteSpace(value);
+
     public ProductDetailsViewModel(
         ProductApiService productApiService,
-        DatabaseService databaseService,
+        IPantryRepository pantryRepository,
         NotificationService notificationService)
     {
         _productApiService = productApiService;
-        _databaseService = databaseService;
+        _pantryRepository = pantryRepository;
         _notificationService = notificationService;
     }
 
@@ -65,13 +84,19 @@ public partial class ProductDetailsViewModel : ObservableObject
     {
         IsLoading = true;
         IsNotFound = false;
+        IsNetworkError = false;
         HasSelectedExpirationDate = false;
         ExpirationDate = DateTime.Today;
         AddToPantryCommand.NotifyCanExecuteChanged();
 
         var info = await _productApiService.GetProductByBarcodeAsync(code);
 
-        if (info.Found)
+        if (info.NetworkError)
+        {
+            IsNetworkError = true;
+            ProductName = "İnternet bağlantısı bulunamadı";
+        }
+        else if (info.Found)
         {
             ProductName = info.ProductName;
             Brand = info.Brand;
@@ -86,6 +111,59 @@ public partial class ProductDetailsViewModel : ObservableObject
         IsLoading = false;
     }
 
+    [RelayCommand]
+    private async Task TakePhotoAsync()
+    {
+        try
+        {
+            if (!MediaPicker.Default.IsCaptureSupported)
+            {
+                await Shell.Current.DisplayAlert("Desteklenmiyor", "Bu cihazda kamera kullanılamıyor.", "Tamam");
+                return;
+            }
+
+            var photo = await MediaPicker.Default.CapturePhotoAsync();
+            if (photo is null) return;
+
+            await SavePhotoLocallyAsync(photo);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Hata", $"Fotoğraf çekilemedi: {ex.Message}", "Tamam");
+        }
+    }
+
+    [RelayCommand]
+    private async Task PickPhotoAsync()
+    {
+        try
+        {
+            var photo = await MediaPicker.Default.PickPhotoAsync();
+            if (photo is null) return;
+
+            await SavePhotoLocallyAsync(photo);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Hata", $"Fotoğraf seçilemedi: {ex.Message}", "Tamam");
+        }
+    }
+
+    private async Task SavePhotoLocallyAsync(FileResult photo)
+    {
+        var localFileName = $"{Guid.NewGuid()}.jpg";
+        var localPath = Path.Combine(FileSystem.AppDataDirectory, localFileName);
+
+        using var sourceStream = await photo.OpenReadAsync();
+        using var localStream = File.OpenWrite(localPath);
+        await sourceStream.CopyToAsync(localStream);
+
+        ImageUrl = localPath;
+    }
+
+    [RelayCommand]
+    private void RemovePhoto() => ImageUrl = string.Empty;
+
     private bool CanAddToPantry() => HasSelectedExpirationDate;
 
     [RelayCommand(CanExecute = nameof(CanAddToPantry))]
@@ -97,11 +175,13 @@ public partial class ProductDetailsViewModel : ObservableObject
             ProductName = ProductName,
             Brand = Brand,
             ImageUrl = ImageUrl,
+            Category = Category,
             Quantity = Quantity,
-            ExpirationDate = ExpirationDate
+            ExpirationDate = ExpirationDate,
+            CreatedDate = DateTime.Now
         };
 
-        await _databaseService.SaveAsync(item);
+        await _pantryRepository.SaveAsync(item);
         await _notificationService.ScheduleExpirationNotificationAsync(item);
         await Shell.Current.GoToAsync("//InventoryPage");
     }
@@ -116,8 +196,8 @@ public partial class ProductDetailsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task CancelAsync()
-    {
-        await Shell.Current.GoToAsync("//InventoryPage");
-    }
+    private async Task RetryAsync() => await LoadProductAsync(Barcode);
+
+    [RelayCommand]
+    private async Task CancelAsync() => await Shell.Current.GoToAsync("//InventoryPage");
 }

@@ -42,6 +42,12 @@ public static class MauiProgram
         builder.Services.AddTransient<ProductDetailsPage>();
         builder.Services.AddTransient<ManualEntryPage>();
 
+        builder.Services.AddSingleton<DatabaseService>();
+        builder.Services.AddSingleton<IPantryRepository>(sp => sp.GetRequiredService<DatabaseService>());
+        builder.Services.AddSingleton<ProductApiService>();
+        builder.Services.AddSingleton<NotificationService>();
+        builder.Services.AddSingleton<HttpClient>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

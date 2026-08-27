@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
             <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <converters:ExpiryToColorConverter x:Key="ExpiryToColorConverter" />
 
         </ResourceDictionary>
     </Application.Resources>
