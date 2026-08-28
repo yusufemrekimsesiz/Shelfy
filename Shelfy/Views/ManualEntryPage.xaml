@@ -19,7 +19,7 @@
             <Entry Text="{Binding Brand}" Placeholder="{x:Static strings:AppResources.Brand_Placeholder}" />
 
             <Label Text="{x:Static strings:AppResources.Category_Title}" FontAttributes="Bold" />
-            <Picker ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding Category}" />
+            <Picker ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding SelectedCategoryOption}" />
 
             <Label Text="{x:Static strings:AppResources.Photo_Label}" FontAttributes="Bold" />
 

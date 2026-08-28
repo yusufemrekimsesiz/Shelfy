@@ -2,9 +2,9 @@
 
 public static class PantrySortOptions
 {
-    public const string ByExpiration = "SKT'ye Göre";
-    public const string ByName = "Alfabetik";
-    public const string ByCreatedDate = "Eklenme Tarihine Göre";
+    public const string ByExpiration = "ByExpiration";
+    public const string ByName = "ByName";
+    public const string ByCreatedDate = "ByCreatedDate";
 
     public static readonly string[] All = { ByExpiration, ByName, ByCreatedDate };
 }
@@ -26,7 +26,7 @@ public static class PantryFilterService
                 x.Brand.Contains(searchText, StringComparison.OrdinalIgnoreCase));
         }
 
-        if (!string.IsNullOrWhiteSpace(category) && category != "Tümü")
+        if (!string.IsNullOrWhiteSpace(category) && category != Categories.AllKey)
         {
             result = result.Where(x => x.Category == category);
         }

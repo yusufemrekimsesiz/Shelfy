@@ -63,4 +63,8 @@
   <data name="Sort_ByExpiration" xml:space="preserve"><value>By Expiration</value></data>
   <data name="Sort_ByName" xml:space="preserve"><value>Alphabetical</value></data>
   <data name="Sort_ByCreatedDate" xml:space="preserve"><value>By Date Added</value></data>
+	<data name="Accessibility_IncreaseQuantity" xml:space="preserve"><value>Increase quantity</value></data>
+	<data name="Accessibility_DecreaseQuantity" xml:space="preserve"><value>Decrease quantity</value></data>
+	<data name="Accessibility_DeleteItem" xml:space="preserve"><value>Delete item</value></data>
+	<data name="Accessibility_ScanNewItem" xml:space="preserve"><value>Scan new item</value></data>
 </root>

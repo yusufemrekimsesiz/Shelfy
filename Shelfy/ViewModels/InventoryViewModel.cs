@@ -2,9 +2,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Shelfy.Core;
+using Shelfy.Localization;
+using Shelfy.Resources.Strings;
 using Shelfy.Services;
 using Shelfy.Views;
-using Shelfy.Resources.Strings;
 
 namespace Shelfy.ViewModels;
 
@@ -30,20 +31,21 @@ public partial class InventoryViewModel : ObservableObject
     private string searchText = string.Empty;
 
     [ObservableProperty]
-    private string selectedSortOption = PantrySortOptions.ByExpiration;
+    private PickerOption selectedSortOption = null!;
 
     [ObservableProperty]
-    private string selectedCategory = "Tümü";
+    private PickerOption selectedCategory = null!;
 
-    public string[] SortOptions => PantrySortOptions.All;
-
-    public string[] CategoryFilterOptions =>
-        new[] { "Tümü" }.Concat(Categories.All).ToArray();
+    public List<PickerOption> SortOptions { get; } = SortLocalizer.BuildSortOptions();
+    public List<PickerOption> CategoryFilterOptions { get; } = CategoryLocalizer.BuildCategoryOptionsWithAll();
 
     public InventoryViewModel(IPantryRepository pantryRepository, NotificationService notificationService)
     {
         _pantryRepository = pantryRepository;
         _notificationService = notificationService;
+
+        selectedSortOption = SortOptions.First(o => o.Key == PantrySortOptions.ByExpiration);
+        selectedCategory = CategoryFilterOptions.First(o => o.Key == Categories.AllKey);
     }
 
     [RelayCommand]
@@ -55,12 +57,12 @@ public partial class InventoryViewModel : ObservableObject
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
-    partial void OnSelectedSortOptionChanged(string value) => ApplyFilter();
-    partial void OnSelectedCategoryChanged(string value) => ApplyFilter();
+    partial void OnSelectedSortOptionChanged(PickerOption value) => ApplyFilter();
+    partial void OnSelectedCategoryChanged(PickerOption value) => ApplyFilter();
 
     private void ApplyFilter()
     {
-        var result = PantryFilterService.Filter(_allItems, SearchText, SelectedCategory, SelectedSortOption);
+        var result = PantryFilterService.Filter(_allItems, SearchText, SelectedCategory.Key, SelectedSortOption.Key);
 
         PantryItems.Clear();
         foreach (var item in result)
@@ -117,10 +119,10 @@ public partial class InventoryViewModel : ObservableObject
         if (item is null) return;
 
         bool confirm = await Shell.Current.DisplayAlert(
-    AppResources.Inventory_Delete_Title,
-    string.Format(AppResources.Inventory_Delete_Message, item.ProductName),
-    AppResources.Inventory_Delete_Confirm,
-    AppResources.Cancel);
+            AppResources.Inventory_Delete_Title,
+            string.Format(AppResources.Inventory_Delete_Message, item.ProductName),
+            AppResources.Inventory_Delete_Confirm,
+            AppResources.Cancel);
 
         if (!confirm) return;
 

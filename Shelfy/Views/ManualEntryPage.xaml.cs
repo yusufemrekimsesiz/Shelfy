@@ -4,9 +4,17 @@ namespace Shelfy.Views;
 
 public partial class ManualEntryPage : ContentPage
 {
+    private readonly ManualEntryViewModel _viewModel;
+
     public ManualEntryPage(ManualEntryViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = _viewModel = viewModel;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.RefreshCategoryOptions();
     }
 }

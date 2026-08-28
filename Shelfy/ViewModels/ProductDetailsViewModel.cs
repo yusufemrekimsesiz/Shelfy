@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Shelfy.Core;
+using Shelfy.Localization;
+using Shelfy.Resources.Strings;
 using Shelfy.Services;
 using Shelfy.Views;
-using Shelfy.Resources.Strings;
 
 namespace Shelfy.ViewModels;
 
@@ -30,7 +31,9 @@ public partial class ProductDetailsViewModel : ObservableObject
     private bool hasImage;
 
     [ObservableProperty]
-    private string category = "Diğer";
+    private PickerOption selectedCategoryOption = null!;
+
+    public string Category => SelectedCategoryOption.Key;
 
     [ObservableProperty]
     private int quantity = 1;
@@ -50,11 +53,12 @@ public partial class ProductDetailsViewModel : ObservableObject
     [ObservableProperty]
     private bool isNetworkError;
 
-    public string[] CategoryOptions => Categories.All;
-
-    public bool IsCameraSupported => DeviceInfo.Platform != DevicePlatform.WinUI;
+    [ObservableProperty]
+    private List<PickerOption> categoryOptions = CategoryLocalizer.BuildCategoryOptions();
 
     public bool ShowContent => !IsLoading && !IsNetworkError;
+
+    public bool IsCameraSupported => DeviceInfo.Platform != DevicePlatform.WinUI;
 
     partial void OnIsLoadingChanged(bool value) => OnPropertyChanged(nameof(ShowContent));
     partial void OnIsNetworkErrorChanged(bool value) => OnPropertyChanged(nameof(ShowContent));
@@ -68,6 +72,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         _productApiService = productApiService;
         _pantryRepository = pantryRepository;
         _notificationService = notificationService;
+        selectedCategoryOption = CategoryOptions.First(o => o.Key == Categories.Other);
     }
 
     async partial void OnBarcodeChanged(string value)
@@ -88,6 +93,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         IsNetworkError = false;
         HasSelectedExpirationDate = false;
         ExpirationDate = DateTime.Today;
+        SelectedCategoryOption = CategoryOptions.First(o => o.Key == Categories.Other);
         AddToPantryCommand.NotifyCanExecuteChanged();
 
         var info = await _productApiService.GetProductByBarcodeAsync(code);
@@ -95,7 +101,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         if (info.NetworkError)
         {
             IsNetworkError = true;
-            ProductName = "İnternet bağlantısı bulunamadı";
+            ProductName = AppResources.ProductDetails_NetworkError;
         }
         else if (info.Found)
         {
@@ -106,7 +112,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         else
         {
             IsNotFound = true;
-            ProductName = "Ürün bulunamadı";
+            ProductName = AppResources.ProductDetails_NotFound;
         }
 
         IsLoading = false;
@@ -201,4 +207,10 @@ public partial class ProductDetailsViewModel : ObservableObject
 
     [RelayCommand]
     private async Task CancelAsync() => await Shell.Current.GoToAsync("//InventoryPage");
+    public void RefreshCategoryOptions()
+    {
+        var previousKey = SelectedCategoryOption?.Key ?? Categories.Other;
+        CategoryOptions = CategoryLocalizer.BuildCategoryOptions();
+        SelectedCategoryOption = CategoryOptions.First(o => o.Key == previousKey);
+    }
 }

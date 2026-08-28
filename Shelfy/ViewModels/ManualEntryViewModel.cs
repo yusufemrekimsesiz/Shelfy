@@ -1,8 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Shelfy.Core;
-using Shelfy.Services;
+using Shelfy.Localization;
 using Shelfy.Resources.Strings;
+using Shelfy.Services;
 
 namespace Shelfy.ViewModels;
 
@@ -28,7 +29,9 @@ public partial class ManualEntryViewModel : ObservableObject
     private bool hasImage;
 
     [ObservableProperty]
-    private string category = "Diğer";
+    private PickerOption selectedCategoryOption = null!;
+
+    public string Category => SelectedCategoryOption.Key;
 
     [ObservableProperty]
     private int quantity = 1;
@@ -39,7 +42,8 @@ public partial class ManualEntryViewModel : ObservableObject
     [ObservableProperty]
     private bool hasSelectedExpirationDate;
 
-    public string[] CategoryOptions => Categories.All;
+    [ObservableProperty]
+    private List<PickerOption> categoryOptions = CategoryLocalizer.BuildCategoryOptions();
 
     public bool IsCameraSupported => DeviceInfo.Platform != DevicePlatform.WinUI;
 
@@ -47,6 +51,14 @@ public partial class ManualEntryViewModel : ObservableObject
     {
         _pantryRepository = pantryRepository;
         _notificationService = notificationService;
+        selectedCategoryOption = CategoryOptions.First(o => o.Key == Categories.Other);
+    }
+
+    public void RefreshCategoryOptions()
+    {
+        var previousKey = SelectedCategoryOption?.Key ?? Categories.Other;
+        CategoryOptions = CategoryLocalizer.BuildCategoryOptions();
+        SelectedCategoryOption = CategoryOptions.First(o => o.Key == previousKey);
     }
 
     partial void OnExpirationDateChanged(DateTime value)
@@ -110,10 +122,7 @@ public partial class ManualEntryViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void RemovePhoto()
-    {
-        ImageUrl = string.Empty;
-    }
+    private void RemovePhoto() => ImageUrl = string.Empty;
 
     private bool CanSave() => HasSelectedExpirationDate && !string.IsNullOrWhiteSpace(ProductName);
 
@@ -124,7 +133,7 @@ public partial class ManualEntryViewModel : ObservableObject
         {
             Barcode = Barcode,
             ProductName = ProductName,
-            Brand = string.IsNullOrWhiteSpace(Brand) ? "Bilinmeyen Marka" : Brand,
+            Brand = string.IsNullOrWhiteSpace(Brand) ? AppResources.Category_Other : Brand,
             ImageUrl = ImageUrl,
             Category = Category,
             Quantity = Quantity,

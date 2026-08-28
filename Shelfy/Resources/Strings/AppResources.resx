@@ -63,4 +63,8 @@
   <data name="Sort_ByExpiration" xml:space="preserve"><value>SKT'ye Göre</value></data>
   <data name="Sort_ByName" xml:space="preserve"><value>Alfabetik</value></data>
   <data name="Sort_ByCreatedDate" xml:space="preserve"><value>Eklenme Tarihine Göre</value></data>
+	<data name="Accessibility_IncreaseQuantity" xml:space="preserve"><value>Adedi artır</value></data>
+	<data name="Accessibility_DecreaseQuantity" xml:space="preserve"><value>Adedi azalt</value></data>
+	<data name="Accessibility_DeleteItem" xml:space="preserve"><value>Ürünü sil</value></data>
+	<data name="Accessibility_ScanNewItem" xml:space="preserve"><value>Yeni ürün tara</value></data>
 </root>

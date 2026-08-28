@@ -70,4 +70,8 @@ public static class AppResources
     public static string Sort_ByExpiration => Get(nameof(Sort_ByExpiration));
     public static string Sort_ByName => Get(nameof(Sort_ByName));
     public static string Sort_ByCreatedDate => Get(nameof(Sort_ByCreatedDate));
+    public static string Accessibility_IncreaseQuantity => Get(nameof(Accessibility_IncreaseQuantity));
+    public static string Accessibility_DecreaseQuantity => Get(nameof(Accessibility_DecreaseQuantity));
+    public static string Accessibility_DeleteItem => Get(nameof(Accessibility_DeleteItem));
+    public static string Accessibility_ScanNewItem => Get(nameof(Accessibility_ScanNewItem));
 }

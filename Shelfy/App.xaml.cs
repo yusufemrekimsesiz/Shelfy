@@ -9,6 +9,11 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+
+        var systemCulture = System.Globalization.CultureInfo.CurrentUICulture;
+        System.Threading.Thread.CurrentThread.CurrentUICulture = systemCulture;
+        System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = systemCulture;
+
         MainPage = new AppShell();
     }
 
