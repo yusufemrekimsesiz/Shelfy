@@ -4,30 +4,31 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Shelfy.ViewModels"
-   xmlns:models="clr-namespace:Shelfy.Core;assembly=Shelfy.Core"
+    xmlns:models="clr-namespace:Shelfy.Core"
+    xmlns:strings="clr-namespace:Shelfy.Resources.Strings"
     x:DataType="vm:InventoryViewModel"
-    Title="Kilerim"
+    Title="{x:Static strings:AppResources.Inventory_Title}"
     BackgroundColor="#F5F5F7">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Elle Ekle" Command="{Binding GoToManualEntryCommand}" />
+        <ToolbarItem Text="{x:Static strings:AppResources.Inventory_AddManually}" Command="{Binding GoToManualEntryCommand}" />
     </ContentPage.ToolbarItems>
 
     <Grid RowDefinitions="Auto,Auto,*">
 
         <SearchBar Grid.Row="0"
-                   Placeholder="Ürün veya marka ara..."
+                   Placeholder="{x:Static strings:AppResources.Inventory_SearchPlaceholder}"
                    Text="{Binding SearchText}"
                    Margin="12,12,12,0" />
 
         <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="8" Margin="12,4,12,0">
             <Picker Grid.Column="0"
-                    Title="Sırala"
+                    Title="{x:Static strings:AppResources.Sort_Title}"
                     ItemsSource="{Binding SortOptions}"
                     SelectedItem="{Binding SelectedSortOption}" />
 
             <Picker Grid.Column="1"
-                    Title="Kategori"
+                    Title="{x:Static strings:AppResources.Category_Title}"
                     ItemsSource="{Binding CategoryFilterOptions}"
                     SelectedItem="{Binding SelectedCategory}" />
         </Grid>
@@ -70,7 +71,7 @@
                                                     BackgroundColor="#EEEEEE" TextColor="Black"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:InventoryViewModel}}, Path=IncrementQuantityCommand}"
                                                     CommandParameter="{Binding .}" />
-                                            <Label Text="{Binding ExpirationDate, StringFormat='SKT: {0:dd/MM/yyyy}'}"
+                                            <Label Text="{Binding ExpirationDate, StringFormat={x:Static strings:AppResources.Inventory_Expiry_Format}}"
                                                    FontSize="12" Margin="8,0,0,0"
                                                    TextColor="{Binding ., Converter={StaticResource ExpiryToColorConverter}}" />
                                         </HorizontalStackLayout>
@@ -89,13 +90,13 @@
 
             <VerticalStackLayout IsVisible="{Binding IsEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
                 <Label Text="📦" FontSize="48" HorizontalOptions="Center" />
-                <Label Text="Kileriniz boş" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
-                <Label Text="Taramaya başlayarak ürün ekleyin" FontSize="13" TextColor="Gray" HorizontalOptions="Center" />
+                <Label Text="{x:Static strings:AppResources.Inventory_Empty_Title}" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
+                <Label Text="{x:Static strings:AppResources.Inventory_Empty_Subtitle}" FontSize="13" TextColor="Gray" HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <VerticalStackLayout IsVisible="{Binding ShowNoResults}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
                 <Label Text="🔍" FontSize="40" HorizontalOptions="Center" />
-                <Label Text="Sonuç bulunamadı" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
+                <Label Text="{x:Static strings:AppResources.Inventory_NoResults}" FontSize="18" TextColor="Gray" HorizontalOptions="Center" />
             </VerticalStackLayout>
 
             <Button Text="＋"

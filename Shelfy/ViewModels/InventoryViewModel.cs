@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using Shelfy.Core;
 using Shelfy.Services;
 using Shelfy.Views;
+using Shelfy.Resources.Strings;
 
 namespace Shelfy.ViewModels;
 
@@ -116,9 +117,10 @@ public partial class InventoryViewModel : ObservableObject
         if (item is null) return;
 
         bool confirm = await Shell.Current.DisplayAlert(
-            "Ürünü Sil",
-            $"\"{item.ProductName}\" kileri listesinden silinsin mi?",
-            "Sil", "Vazgeç");
+    AppResources.Inventory_Delete_Title,
+    string.Format(AppResources.Inventory_Delete_Message, item.ProductName),
+    AppResources.Inventory_Delete_Confirm,
+    AppResources.Cancel);
 
         if (!confirm) return;
 

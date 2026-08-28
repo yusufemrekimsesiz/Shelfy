@@ -4,8 +4,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Shelfy.ViewModels"
+    xmlns:strings="clr-namespace:Shelfy.Resources.Strings"
     x:DataType="vm:ProductDetailsViewModel"
-    Title="Ürün Detayı"
+    Title="{x:Static strings:AppResources.ProductDetails_Title}"
     BackgroundColor="#F5F5F7">
 
     <ScrollView>
@@ -19,68 +20,68 @@
 
             <VerticalStackLayout Grid.Row="1" IsVisible="{Binding IsNetworkError}" Spacing="10" HorizontalOptions="Center" Margin="0,40,0,0">
                 <Label Text="📡" FontSize="40" HorizontalOptions="Center" />
-                <Label Text="İnternet bağlantısı bulunamadı" FontSize="16" HorizontalOptions="Center" />
-                <Button Text="Tekrar Dene" Command="{Binding RetryCommand}" BackgroundColor="#2196F3" TextColor="White" CornerRadius="12" />
+                <Label Text="{x:Static strings:AppResources.ProductDetails_NetworkError}" FontSize="16" HorizontalOptions="Center" />
+                <Button Text="{x:Static strings:AppResources.ProductDetails_Retry}" Command="{Binding RetryCommand}" BackgroundColor="#2196F3" TextColor="White" CornerRadius="12" />
             </VerticalStackLayout>
 
             <VerticalStackLayout Grid.Row="2" Spacing="16" IsVisible="{Binding ShowContent}">
 
                 <Border StrokeShape="RoundRectangle 16" HeightRequest="180" WidthRequest="180"
-        HorizontalOptions="Center" Stroke="LightGray"
-        IsVisible="{Binding HasImage}">
+                        HorizontalOptions="Center" Stroke="LightGray"
+                        IsVisible="{Binding HasImage}">
                     <Image Source="{Binding ImageUrl}" Aspect="AspectFit" />
                 </Border>
 
                 <VerticalStackLayout IsVisible="{Binding HasImage, Converter={StaticResource InvertedBoolConverter}}"
-                      HorizontalOptions="Center" Spacing="4">
+                                      HorizontalOptions="Center" Spacing="4">
                     <Label Text="📷" FontSize="40" HorizontalOptions="Center" TextColor="LightGray" />
-                    <Label Text="Görsel bulunamadı" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
+                    <Label Text="{x:Static strings:AppResources.ProductDetails_NoImage}" FontSize="12" TextColor="Gray" HorizontalOptions="Center" />
                 </VerticalStackLayout>
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="8" Margin="0,10,0,0"
-      IsVisible="{Binding IsNotFound, Converter={StaticResource InvertedBoolConverter}}">
-                    <Button Grid.Column="0" Text="📷 Fotoğraf Çek"
-            Command="{Binding TakePhotoCommand}"
-            BackgroundColor="#2196F3" TextColor="White"
-            CornerRadius="10" HeightRequest="40" FontSize="12"
-            IsVisible="{Binding IsCameraSupported}" />
+                      IsVisible="{Binding IsNotFound, Converter={StaticResource InvertedBoolConverter}}">
+                    <Button Grid.Column="0" Text="{x:Static strings:AppResources.TakePhoto}"
+                            Command="{Binding TakePhotoCommand}"
+                            BackgroundColor="#2196F3" TextColor="White"
+                            CornerRadius="10" HeightRequest="40" FontSize="12"
+                            IsVisible="{Binding IsCameraSupported}" />
 
-                    <Button Grid.Column="1" Text="🖼️ Galeriden Seç"
-            Command="{Binding PickPhotoCommand}"
-            BackgroundColor="#2196F3" TextColor="White"
-            CornerRadius="10" HeightRequest="40" FontSize="12" />
+                    <Button Grid.Column="1" Text="{x:Static strings:AppResources.PickPhoto}"
+                            Command="{Binding PickPhotoCommand}"
+                            BackgroundColor="#2196F3" TextColor="White"
+                            CornerRadius="10" HeightRequest="40" FontSize="12" />
                 </Grid>
 
-                <Button Text="Fotoğrafı Kaldır"
-        Command="{Binding RemovePhotoCommand}"
-        BackgroundColor="Transparent" TextColor="Red" FontSize="12"
-        IsVisible="{Binding HasImage}" />
+                <Button Text="{x:Static strings:AppResources.RemovePhoto}"
+                        Command="{Binding RemovePhotoCommand}"
+                        BackgroundColor="Transparent" TextColor="Red" FontSize="12"
+                        IsVisible="{Binding HasImage}" />
 
                 <Label Text="{Binding ProductName}" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
                 <Label Text="{Binding Brand}" FontSize="14" TextColor="Gray" HorizontalOptions="Center" />
 
                 <VerticalStackLayout Spacing="6" IsVisible="{Binding IsNotFound, Converter={StaticResource InvertedBoolConverter}}">
-                    <Label Text="Kategori" FontAttributes="Bold" />
+                    <Label Text="{x:Static strings:AppResources.Category_Title}" FontAttributes="Bold" />
                     <Picker ItemsSource="{Binding CategoryOptions}" SelectedItem="{Binding Category}" />
                 </VerticalStackLayout>
 
                 <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,20,0,0">
                     <VerticalStackLayout Grid.Column="0" Spacing="6">
-                        <Label Text="Adet" FontAttributes="Bold" />
+                        <Label Text="{x:Static strings:AppResources.Quantity_Label}" FontAttributes="Bold" />
                         <Stepper Minimum="1" Maximum="50" Value="{Binding Quantity}" />
                         <Label Text="{Binding Quantity}" HorizontalOptions="Center" />
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Grid.Column="1" Spacing="6">
-                        <Label Text="Son Kullanma Tarihi *" FontAttributes="Bold" />
+                        <Label Text="{x:Static strings:AppResources.ExpirationDate_Label}" FontAttributes="Bold" />
                         <DatePicker Date="{Binding ExpirationDate}" Format="dd/MM/yyyy" />
-                        <Label Text="⚠️ Ürünün üzerindeki tarihi girin"
+                        <Label Text="{x:Static strings:AppResources.ExpirationDate_Warning}"
                                FontSize="11" TextColor="OrangeRed"
                                IsVisible="{Binding HasSelectedExpirationDate, Converter={StaticResource InvertedBoolConverter}}" />
                     </VerticalStackLayout>
                 </Grid>
 
-                <Button Text="Kilere Ekle"
+                <Button Text="{x:Static strings:AppResources.AddToPantry}"
                         Command="{Binding AddToPantryCommand}"
                         BackgroundColor="#4CAF50" TextColor="White"
                         CornerRadius="12" HeightRequest="50" Margin="0,20,0,0"
@@ -93,13 +94,13 @@
                     </Button.Triggers>
                 </Button>
 
-                <Button Text="Elle Bilgi Gir"
+                <Button Text="{x:Static strings:AppResources.EnterManually}"
                         Command="{Binding GoToManualEntryCommand}"
                         BackgroundColor="#2196F3" TextColor="White"
                         CornerRadius="12" HeightRequest="50" Margin="0,10,0,0"
                         IsVisible="{Binding IsNotFound}" />
 
-                <Button Text="Vazgeç"
+                <Button Text="{x:Static strings:AppResources.Cancel}"
                         Command="{Binding CancelCommand}"
                         BackgroundColor="Transparent" TextColor="Red" />
             </VerticalStackLayout>

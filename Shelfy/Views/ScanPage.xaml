@@ -5,8 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Shelfy.ViewModels"
     xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+    xmlns:strings="clr-namespace:Shelfy.Resources.Strings"
     x:DataType="vm:ScanViewModel"
-    Title="Barkod Tara"
+    Title="{x:Static strings:AppResources.Scan_Title}"
     BackgroundColor="Black">
 
     <Grid>
@@ -16,19 +17,19 @@
             BarcodesDetected="OnBarcodesDetected" />
 
         <Border HeightRequest="180" WidthRequest="280"
-        BackgroundColor="Transparent"
-        Stroke="LimeGreen" StrokeThickness="3"
-        HorizontalOptions="Center" VerticalOptions="Center">
+                BackgroundColor="Transparent"
+                Stroke="LimeGreen" StrokeThickness="3"
+                HorizontalOptions="Center" VerticalOptions="Center">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="12" />
             </Border.StrokeShape>
         </Border>
 
-        <Label Text="Barkodu çerçeve içine hizalayın"
+        <Label Text="{x:Static strings:AppResources.Scan_Instruction}"
                TextColor="White" FontSize="16"
                HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,60" />
 
-        <Button Text="Geri"
+        <Button Text="{x:Static strings:AppResources.Back}"
                 Command="{Binding GoBackCommand}"
                 HorizontalOptions="Start" VerticalOptions="Start"
                 Margin="16" BackgroundColor="#33000000" TextColor="White" />

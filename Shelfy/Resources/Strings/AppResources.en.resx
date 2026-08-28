@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Inventory_Title" xml:space="preserve"><value>My Pantry</value></data>
+  <data name="Inventory_SearchPlaceholder" xml:space="preserve"><value>Search product or brand...</value></data>
+  <data name="Inventory_AddManually" xml:space="preserve"><value>Add Manually</value></data>
+  <data name="Inventory_Empty_Title" xml:space="preserve"><value>Your pantry is empty</value></data>
+  <data name="Inventory_Empty_Subtitle" xml:space="preserve"><value>Start by scanning a product</value></data>
+  <data name="Inventory_NoResults" xml:space="preserve"><value>No results found</value></data>
+  <data name="Inventory_Expiry_Format" xml:space="preserve"><value>Exp: {0:MM/dd/yyyy}</value></data>
+  <data name="Inventory_Delete_Title" xml:space="preserve"><value>Delete Item</value></data>
+  <data name="Inventory_Delete_Message" xml:space="preserve"><value>Remove "{0}" from your pantry?</value></data>
+  <data name="Inventory_Delete_Confirm" xml:space="preserve"><value>Delete</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Sort_Title" xml:space="preserve"><value>Sort</value></data>
+  <data name="Category_Title" xml:space="preserve"><value>Category</value></data>
+  <data name="Category_All" xml:space="preserve"><value>All</value></data>
+
+  <data name="Scan_Title" xml:space="preserve"><value>Scan Barcode</value></data>
+  <data name="Scan_Instruction" xml:space="preserve"><value>Align barcode within the frame</value></data>
+  <data name="Back" xml:space="preserve"><value>Back</value></data>
+
+  <data name="ProductDetails_Title" xml:space="preserve"><value>Product Details</value></data>
+  <data name="ProductDetails_NotFound" xml:space="preserve"><value>Product not found</value></data>
+  <data name="ProductDetails_NetworkError" xml:space="preserve"><value>No internet connection</value></data>
+  <data name="ProductDetails_Retry" xml:space="preserve"><value>Retry</value></data>
+  <data name="ProductDetails_NoImage" xml:space="preserve"><value>No image found</value></data>
+  <data name="TakePhoto" xml:space="preserve"><value>📷 Take Photo</value></data>
+  <data name="PickPhoto" xml:space="preserve"><value>🖼️ Choose from Gallery</value></data>
+  <data name="RemovePhoto" xml:space="preserve"><value>Remove Photo</value></data>
+  <data name="Quantity_Label" xml:space="preserve"><value>Quantity</value></data>
+  <data name="ExpirationDate_Label" xml:space="preserve"><value>Expiration Date *</value></data>
+  <data name="ExpirationDate_Warning" xml:space="preserve"><value>⚠️ Enter the date shown on the product</value></data>
+  <data name="AddToPantry" xml:space="preserve"><value>Add to Pantry</value></data>
+  <data name="EnterManually" xml:space="preserve"><value>Enter Manually</value></data>
+
+  <data name="ManualEntry_Title" xml:space="preserve"><value>Add Product</value></data>
+  <data name="ProductName_Label" xml:space="preserve"><value>Product Name *</value></data>
+  <data name="ProductName_Placeholder" xml:space="preserve"><value>e.g. Whole Milk</value></data>
+  <data name="Brand_Label" xml:space="preserve"><value>Brand</value></data>
+  <data name="Brand_Placeholder" xml:space="preserve"><value>e.g. Acme Dairy</value></data>
+  <data name="Photo_Label" xml:space="preserve"><value>Product Photo (optional)</value></data>
+
+  <data name="Alert_NotSupported_Title" xml:space="preserve"><value>Not Supported</value></data>
+  <data name="Alert_CameraNotSupported" xml:space="preserve"><value>Camera is not available on this device.</value></data>
+  <data name="Alert_Error_Title" xml:space="preserve"><value>Error</value></data>
+  <data name="Alert_PhotoCaptureFailed" xml:space="preserve"><value>Failed to take photo: {0}</value></data>
+  <data name="Alert_PhotoPickFailed" xml:space="preserve"><value>Failed to pick photo: {0}</value></data>
+
+  <data name="Category_Dairy" xml:space="preserve"><value>Dairy</value></data>
+  <data name="Category_Meat" xml:space="preserve"><value>Meat</value></data>
+  <data name="Category_Canned" xml:space="preserve"><value>Canned Goods</value></data>
+  <data name="Category_Beverage" xml:space="preserve"><value>Beverages</value></data>
+  <data name="Category_Snack" xml:space="preserve"><value>Snacks</value></data>
+  <data name="Category_Cleaning" xml:space="preserve"><value>Cleaning</value></data>
+  <data name="Category_Produce" xml:space="preserve"><value>Fruits &amp; Vegetables</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>Other</value></data>
+
+  <data name="Sort_ByExpiration" xml:space="preserve"><value>By Expiration</value></data>
+  <data name="Sort_ByName" xml:space="preserve"><value>Alphabetical</value></data>
+  <data name="Sort_ByCreatedDate" xml:space="preserve"><value>By Date Added</value></data>
+</root>

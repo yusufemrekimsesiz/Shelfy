@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Shelfy.Core;
 using Shelfy.Services;
+using Shelfy.Resources.Strings;
 
 namespace Shelfy.ViewModels;
 
@@ -65,7 +66,7 @@ public partial class ManualEntryViewModel : ObservableObject
         {
             if (!MediaPicker.Default.IsCaptureSupported)
             {
-                await Shell.Current.DisplayAlert("Desteklenmiyor", "Bu cihazda kamera kullanılamıyor.", "Tamam");
+                await Shell.Current.DisplayAlert(AppResources.Alert_NotSupported_Title, AppResources.Alert_CameraNotSupported, "OK");
                 return;
             }
 
@@ -76,7 +77,7 @@ public partial class ManualEntryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Hata", $"Fotoğraf çekilemedi: {ex.Message}", "Tamam");
+            await Shell.Current.DisplayAlert(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoCaptureFailed, ex.Message), "OK");
         }
     }
 
@@ -92,7 +93,7 @@ public partial class ManualEntryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Hata", $"Fotoğraf seçilemedi: {ex.Message}", "Tamam");
+            await Shell.Current.DisplayAlert(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoPickFailed, ex.Message), "OK");
         }
     }
 

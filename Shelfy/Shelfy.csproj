@@ -11,7 +11,7 @@
 		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
-
+		<NeutralLanguage>tr</NeutralLanguage>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Shelfy</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -31,8 +31,7 @@
 		<ApplicationTitle>Shelfy</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.shelfy</ApplicationId>
-
+		<ApplicationId>com.yusuf.shelfy</ApplicationId>
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
@@ -109,6 +108,12 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Shelfy.Core\Shelfy.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\Strings\AppResources.en.resx">
+			<DependentUpon>AppResources.resx</DependentUpon>
+		</EmbeddedResource>
 	</ItemGroup>
 
 </Project>

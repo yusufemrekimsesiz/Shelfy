@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Inventory_Title" xml:space="preserve"><value>Kilerim</value></data>
+  <data name="Inventory_SearchPlaceholder" xml:space="preserve"><value>Ürün veya marka ara...</value></data>
+  <data name="Inventory_AddManually" xml:space="preserve"><value>Elle Ekle</value></data>
+  <data name="Inventory_Empty_Title" xml:space="preserve"><value>Kileriniz boş</value></data>
+  <data name="Inventory_Empty_Subtitle" xml:space="preserve"><value>Taramaya başlayarak ürün ekleyin</value></data>
+  <data name="Inventory_NoResults" xml:space="preserve"><value>Sonuç bulunamadı</value></data>
+  <data name="Inventory_Expiry_Format" xml:space="preserve"><value>SKT: {0:dd/MM/yyyy}</value></data>
+  <data name="Inventory_Delete_Title" xml:space="preserve"><value>Ürünü Sil</value></data>
+  <data name="Inventory_Delete_Message" xml:space="preserve"><value>"{0}" kileri listesinden silinsin mi?</value></data>
+  <data name="Inventory_Delete_Confirm" xml:space="preserve"><value>Sil</value></data>
+  <data name="Cancel" xml:space="preserve"><value>Vazgeç</value></data>
+  <data name="Sort_Title" xml:space="preserve"><value>Sırala</value></data>
+  <data name="Category_Title" xml:space="preserve"><value>Kategori</value></data>
+  <data name="Category_All" xml:space="preserve"><value>Tümü</value></data>
+
+  <data name="Scan_Title" xml:space="preserve"><value>Barkod Tara</value></data>
+  <data name="Scan_Instruction" xml:space="preserve"><value>Barkodu çerçeve içine hizalayın</value></data>
+  <data name="Back" xml:space="preserve"><value>Geri</value></data>
+
+  <data name="ProductDetails_Title" xml:space="preserve"><value>Ürün Detayı</value></data>
+  <data name="ProductDetails_NotFound" xml:space="preserve"><value>Ürün bulunamadı</value></data>
+  <data name="ProductDetails_NetworkError" xml:space="preserve"><value>İnternet bağlantısı bulunamadı</value></data>
+  <data name="ProductDetails_Retry" xml:space="preserve"><value>Tekrar Dene</value></data>
+  <data name="ProductDetails_NoImage" xml:space="preserve"><value>Görsel bulunamadı</value></data>
+  <data name="TakePhoto" xml:space="preserve"><value>📷 Fotoğraf Çek</value></data>
+  <data name="PickPhoto" xml:space="preserve"><value>🖼️ Galeriden Seç</value></data>
+  <data name="RemovePhoto" xml:space="preserve"><value>Fotoğrafı Kaldır</value></data>
+  <data name="Quantity_Label" xml:space="preserve"><value>Adet</value></data>
+  <data name="ExpirationDate_Label" xml:space="preserve"><value>Son Kullanma Tarihi *</value></data>
+  <data name="ExpirationDate_Warning" xml:space="preserve"><value>⚠️ Ürünün üzerindeki tarihi girin</value></data>
+  <data name="AddToPantry" xml:space="preserve"><value>Kilere Ekle</value></data>
+  <data name="EnterManually" xml:space="preserve"><value>Elle Bilgi Gir</value></data>
+
+  <data name="ManualEntry_Title" xml:space="preserve"><value>Ürün Ekle</value></data>
+  <data name="ProductName_Label" xml:space="preserve"><value>Ürün Adı *</value></data>
+  <data name="ProductName_Placeholder" xml:space="preserve"><value>Örn: Tam Yağlı Süt</value></data>
+  <data name="Brand_Label" xml:space="preserve"><value>Marka</value></data>
+  <data name="Brand_Placeholder" xml:space="preserve"><value>Örn: Sütaş</value></data>
+  <data name="Photo_Label" xml:space="preserve"><value>Ürün Fotoğrafı (opsiyonel)</value></data>
+
+  <data name="Alert_NotSupported_Title" xml:space="preserve"><value>Desteklenmiyor</value></data>
+  <data name="Alert_CameraNotSupported" xml:space="preserve"><value>Bu cihazda kamera kullanılamıyor.</value></data>
+  <data name="Alert_Error_Title" xml:space="preserve"><value>Hata</value></data>
+  <data name="Alert_PhotoCaptureFailed" xml:space="preserve"><value>Fotoğraf çekilemedi: {0}</value></data>
+  <data name="Alert_PhotoPickFailed" xml:space="preserve"><value>Fotoğraf seçilemedi: {0}</value></data>
+
+  <data name="Category_Dairy" xml:space="preserve"><value>Süt Ürünleri</value></data>
+  <data name="Category_Meat" xml:space="preserve"><value>Et Ürünleri</value></data>
+  <data name="Category_Canned" xml:space="preserve"><value>Konserve</value></data>
+  <data name="Category_Beverage" xml:space="preserve"><value>İçecek</value></data>
+  <data name="Category_Snack" xml:space="preserve"><value>Atıştırmalık</value></data>
+  <data name="Category_Cleaning" xml:space="preserve"><value>Temizlik</value></data>
+  <data name="Category_Produce" xml:space="preserve"><value>Meyve &amp; Sebze</value></data>
+  <data name="Category_Other" xml:space="preserve"><value>Diğer</value></data>
+
+  <data name="Sort_ByExpiration" xml:space="preserve"><value>SKT'ye Göre</value></data>
+  <data name="Sort_ByName" xml:space="preserve"><value>Alfabetik</value></data>
+  <data name="Sort_ByCreatedDate" xml:space="preserve"><value>Eklenme Tarihine Göre</value></data>
+</root>
