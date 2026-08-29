@@ -125,7 +125,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         {
             if (!MediaPicker.Default.IsCaptureSupported)
             {
-                await Shell.Current.DisplayAlert(AppResources.Alert_NotSupported_Title, AppResources.Alert_CameraNotSupported, "OK");
+                await Shell.Current.DisplayAlertAsync(AppResources.Alert_NotSupported_Title, AppResources.Alert_CameraNotSupported, "OK");
                 return;
             }
 
@@ -136,7 +136,7 @@ public partial class ProductDetailsViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoCaptureFailed, ex.Message), "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoCaptureFailed, ex.Message), "OK");
         }
     }
 
@@ -145,14 +145,15 @@ public partial class ProductDetailsViewModel : ObservableObject
     {
         try
         {
-            var photo = await MediaPicker.Default.PickPhotoAsync();
+            var photos = await MediaPicker.Default.PickPhotosAsync();
+            var photo = photos?.FirstOrDefault();
             if (photo is null) return;
 
             await SavePhotoLocallyAsync(photo);
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoPickFailed, ex.Message), "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Alert_Error_Title, string.Format(AppResources.Alert_PhotoPickFailed, ex.Message), "OK");
         }
     }
 

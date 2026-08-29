@@ -118,11 +118,11 @@ public partial class InventoryViewModel : ObservableObject
     {
         if (item is null) return;
 
-        bool confirm = await Shell.Current.DisplayAlert(
-            AppResources.Inventory_Delete_Title,
-            string.Format(AppResources.Inventory_Delete_Message, item.ProductName),
-            AppResources.Inventory_Delete_Confirm,
-            AppResources.Cancel);
+        bool confirm = await Shell.Current.DisplayAlertAsync(
+    AppResources.Inventory_Delete_Title,
+    string.Format(AppResources.Inventory_Delete_Message, item.ProductName),
+    AppResources.Inventory_Delete_Confirm,
+    AppResources.Cancel);
 
         if (!confirm) return;
 
